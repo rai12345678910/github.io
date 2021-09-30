@@ -1,0 +1,72 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+table { 
+  border-collapse: collapse;
+}
+table td { 
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+}
+</style>
+<script type="text/javascript">
+window.onload = function() {
+  var width = 12
+  var height = 21 
+  var speed = 20 
+  var fills = {}
+  var html = ['<table>']
+  for(var y = 0; y < height; y++) {
+    html.push('<tr>')
+    for(var x = 0; x < width; x++) {
+      if(x == 0 || x == width - 1 || y == height - 1) {
+        html.push('<td style="background-color:silver"></td>')
+        fills[x + y * width] = 'silver'
+      } else { 
+        html.push('<td></td>')
+      }
+    } 
+  }
+  html.push('</table>')
+  document.getElementById('view').innerHTML = html.join('')
+  var cells = document.getElementsByTagName('td')
+  var top = 2
+  var top0 = top
+  var left = Math.floor(width / 2)
+  var left0 = left 
+  var w = width 
+  var blocks = [
+    { color: 'cyan', angles: [ [-1,1,2], [-w,w,w+w], [-2,-1,1], [-w-w,-w,w] ] },
+    { color: 'yellow', angles: [ [-w-1,-w,-1] ] },
+    { color: 'green', angles: [ [-w,1-w,-1], [-w,1,w+1], [1,w-1,w], [-w-1,-1,w] ] },
+    { color: 'red', angles: [ [-w-1,-w,1], [1-w,1,w], [-1,w,w+1], [-w,-1,w-1] ] },
+    { color: 'blue', angles: [ [-w-1,-1,1], [-w,1-w,w], [-1,1,w+1], [-w,w-1,w] ] },
+    { color: 'orange', angles: [ [1-w,-1,1], [-w,w,w+1], [-1,1,w-1], [-w-1,-w,w] ] },
+    { color: 'magenta', angles: [ [-w,-1,1], [-w,1,w], [-1,1,w], [-w,-1,w] ] } ]
+  var block = blocks[Math.floor(Math.random() * blocks.length)]
+  var angle = 0 
+  var angle0 = angle 
+  var parts0 = []
+  var score = 0 
+  var score0 = score
+  var keys = {}
+  document.onkeydown = function(e) {
+    switch((e || event).keyCode) {
+    case 37: keys.left = true; break
+    case 39: keys.right = true; break 
+    case 40: keys.down = true; break
+    case 32: keys.rotate = true; break
+    }
+  }
+  var tick = 0
+  var move = function() { 
+    tick++ 
+    left0 = left 
+    top0 = top 
+    angle0 = angle 
+    if(tick % speed == 0) { 
+      top++
+    } else { 
+      if(keys.left) left--
+      if(keys.right) left++
+      if(keys.down) top++
